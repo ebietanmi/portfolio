@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
 import nodemailer from 'nodemailer';
-
+import { v2 as cloudinary } from 'cloudinary';
 import {
     createUserSQL, getUserSQL,
     getUsersSQL, checkUserSQL, createProjectSQL, createBlogSQL,
@@ -13,6 +13,14 @@ import {
     deleteProjectSQL, updatePasswordSQL, createRecievedMailSQL,
     getBlogsSQL
 } from './controllers/database_controller.js';
+
+
+cloudinary.config({ 
+  cloud_name:process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret:process.env.CLOUDINARY_API_SECRET
+
+});
 
 
 const PORT = 3000;
