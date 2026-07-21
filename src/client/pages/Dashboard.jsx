@@ -2,33 +2,52 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faBlog, faCake, faDashboard, faFile, faStar, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate, useLoaderData, data } from 'react-router-dom';
 import { useCallback, useEffect, useState } from "react";
-import { getProjectsAPI } from "../controllers/APIs";
+import { getUsersAPI, getBlogsAPI, getProjectsAPI } from "../controllers/APIs";
 import TableData from "../componets/TableData";
 import { handleLogout } from "../controllers/client_controllers";
-import PreviewProjectModal from '../componets/PreviewProjectModal';
 import { ResetPassword } from "../componets/ResetPassword";
 import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
+import { ScaleLoader } from "react-spinners";
 
 function Dashboard() {
-
     const { username } = useLoaderData(); //Because we used createBrowser router we can use useLoader to fetch data across the site
     const navigate = useNavigate()
     const [projects, setProjects] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [blogs, setBlogs] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const fetchProjects = useCallback(() => {
+    const fetchData = useCallback(() => {
+        getUsersAPI()
+            .then(res => res.json())
+            .then(setUsers);
         getProjectsAPI()
             .then(res => res.json())
-            .then(setProjects)
-    }, [])
+            .then(setProjects);
+        getBlogsAPI()
+            .then(res => res.json())
+            .then(setBlogs);
+    }, []);
+    // const fetchUsers = useCallback(() => {
+    //     getUsersAPI()
+    //         .then(res => res.json())
+    //         .then(setProjects)
+    // }, []);
+    // const fetchBlogs = useCallback(() => {
+    //     getProjectsAPI()
+    //         .then(res => res.json())
+    //         .then(setProjects)
+    // }, []);
 
     useEffect(() => {
-        fetchProjects()
+        fetchData()
     }, [])
 
-    function previewProjectHandler(project){
-        console.log(project);
-        // <Link to={`/dashboard/project/${project.id}`} />
-        navigate(`/dashboard/project/${project.id}`, {state:{data:project}});
+    function projectViewMoreHandler(project) {
+        navigate(`/dashboard/project/${project.id}`, { state: { project: project } });
+    }
+    function handleRightClick(e) {
+        e.preventDefault();
+        console.log("Right Clicked", e.clientX, e.clientY, e);
     }
 
     return (
@@ -41,10 +60,15 @@ function Dashboard() {
                         <span>{username.toUpperCase()}</span>
                     </h3>
                     <hr />
-                    <h6 className="project-count customSecondarytextColor">Number of projects:{projects.length}</h6>
+                    <div className="text-count-wrapper">
+                        <h6 className="count-text" >Number of users <span className="count">{users.length}</span></h6>
+                        <h6 className="count-text" >Number of projects:<span className="count">{projects.length}</span></h6>
+                        <h6 className="count-text" >Number of blogs:<span className="count">{blogs.length}</span></h6>
+                    </div>
+
                     <div className="operation-wrapper">
-                       <button onClick={()=>{navigate('/dashboard/create-blog')}} className="operation-btn" type="button"><FontAwesomeIcon icon={faBlog} ></FontAwesomeIcon> Blog</button> 
-                       <button onClick={()=>{navigate('/dashboard/create-user')}} type="button"><FontAwesomeIcon icon={faUser} ></FontAwesomeIcon> User</button> 
+                        <button onClick={() => { navigate('/dashboard/create-blog') }} className="operation-btn" type="button"><FontAwesomeIcon icon={faBlog} ></FontAwesomeIcon> Blog</button>
+                        <button onClick={() => { navigate('/dashboard/create-user') }} type="button"><FontAwesomeIcon icon={faUser} ></FontAwesomeIcon> User</button>
                     </div>
                 </div>
                 <ResetPassword />
@@ -61,12 +85,13 @@ function Dashboard() {
                         </Link>
                     </div>
                     <div className="project-table-wrapper">
+                        <ScaleLoader height={10} id="loader" loading={isLoading} />
                         <table className="project-table">
                             <tbody>
                                 <tr>
                                     <th className="project-table-head">Project Title</th>
                                     <th className="project-table-head">Project Description</th>
-                                    <th className="project-table-head">Project Author</th>  
+                                    <th className="project-table-head">Project Author</th>
                                     <th className="project-table-head">Date created</th>
                                 </tr>
                             </tbody>
@@ -74,8 +99,11 @@ function Dashboard() {
                                 return <TableData
                                     key={project.id}
                                     project={project}
-                                    previewProjecthandler={()=>previewProjectHandler(project)}
-                                    />
+                                    projectViewMoreHandler={() => projectViewMoreHandler(project)}
+                                    handleRightClick={(e) => handleRightClick(e)}
+                                    isLoading={isLoading}
+                                    setLoading={setLoading}
+                                />
                             }) : <></>}
                         </table>
                     </div>

@@ -12,27 +12,40 @@ export default function LoginPage() {
     const navigate = useNavigate();
 
     return (
-        <section className="login-page">
-            <form onSubmit={(e) => {
-                e.preventDefault()
-                const formData = new FormData(e.target);
-                const username = formData.get('username');
-                const password = formData.get('password');
-                handleLogin({ username, password }, navigate, isLoading, setLoading);
-            }
-            } >
-                {/* <Link className='login-page-btn' to={'/'}><FontAwesomeIcon icon={faArrowLeft} size='2x' /></Link> */}
-                <div className="login-form-input-wrapper">
+        <section className="login-screen">
+            <div className="login-screen-content-wrapper">
+                <ScaleLoader height={10} id="loader" loading={false} />
+                <div className="login-form-wrapper">
                     <h2 className="login-page-header">LOGIN</h2>
-                    <input name="username" required id="login-usernameID" className="login-input" type="text" placeholder="Username" />
-                    <ScaleLoader height={10} width={3} loading={isLoading} />
-                    <input name="password" required id="login-passwordID" className="login-input" type="password" placeholder="Password" />
-                    <div className="form-action-wrapper">
-                        <input className="login-action-btn action-cancel-btn" type="button" value="Cancel" />
-                        <input className="login-action-btn  action-submit-btn" type="submit" value="Submit" />
-                    </div>
+                    <form className="login-form"
+                        onSubmit={(e) => {
+                            e.preventDefault()
+                            const formData = new FormData(e.target);
+                            const username = formData.get('username');
+                            const password = formData.get('password');
+                            handleLogin({ username, password }, isLoading, setLoading, navigate);
+                        }
+                        } >
+                        <div className="login-form-group">
+                            <label htmlFor="username">Username</label>
+                            <input name="username" required
+                             id="login-usernameID" className="login-input" type="text" 
+                             placeholder="Username" />
+                        </div>
+                        <div className="login-form-group">
+                            <label htmlFor="password">Password</label>
+                            <input name="password" required
+                             id="login-passwordID" className="login-input" type="password"
+                              placeholder="Password" />
+                        </div>
+                        <div className="form-action-wrapper">
+                            <button className="login-action-btn action-cancel-btn" type="button">Cancel</button>
+                            <button className="login-action-btn  action-submit-btn" type="submit" value="Submit" >Submit</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+
+            </div>
         </section>
 
     )

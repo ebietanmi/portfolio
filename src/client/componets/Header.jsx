@@ -6,9 +6,6 @@ import { faPerson } from '@fortawesome/free-solid-svg-icons/faPerson';
 import { faPersonCircleCheck, faUser } from '@fortawesome/free-solid-svg-icons';
 import App from './../../App';
 
-
-
-
 function Header() {
     // const navigate = useNavigate();
     const [isOpen, setOpen] = useState(false);
@@ -29,7 +26,7 @@ function Header() {
             <img className='nav-logo' src={logo} alt="logo" srcSet="" />
             <ul className={`nav-links ${isOpen ? 'active' : ''}`}>
                 <li ><Link className='_link' to={'/about'}>About</Link></li>
-                <li><Link className='_link' to={'/blog'}>Blog</Link></li>
+                <li><Link className='_link' to={'/blogs'}>Blog</Link></li>
                 <li><Link className='_link' to={'/contact'}>Contact</Link></li>
                 <li>
                     <Link to={'login'} className=' _link'>

@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { createProjectAPI, deleteProjectAPI, loginAPI, resetPasswordAPI } from "./APIs";
+import createUserAPI, { createProjectAPI, createBlogAPI, deleteProjectAPI, loginAPI, resetPasswordAPI } from "./APIs";
 import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
+
 //Handles Login Functions
-export async function handleLogin({ username, password }, navigate, isLoading, setLoading) {
+export async function handleLogin({ username, password }, isLoading, setLoading, navigate) {
   setLoading(isLoading => true)
-  const response = await loginAPI({ username, password });
-  const data = await response.json();
+  const response = await loginAPI({ username, password }).then(res => res.json());
   if (response.ok) {
-    localStorage.setItem('token', data.token);
+    localStorage.setItem('token', response.token);
     setLoading(isLoading => false)
     navigate('/dashboard',);
   } else {
@@ -18,7 +18,7 @@ export async function handleLogin({ username, password }, navigate, isLoading, s
   }
 }
 
-export function handleLogout({isLoading, setLoading, navigate}) {
+export function handleLogout({ isLoading, setLoading, navigate }) {
   setLoading(isLoading => true);
   const token = localStorage.getItem('token');
   if (token !== null || '') {
@@ -27,19 +27,106 @@ export function handleLogout({isLoading, setLoading, navigate}) {
     navigate('/')
   } else {
     navigate('/login')
-    setLoading(isLoading=>false)
+    setLoading(isLoading => false)
+  }
+}
+
+//Create User Handler
+export async function handleCreateUser(formData, isLoading, setLoading, navigate) {
+  setLoading(isLoading => true);
+  const response = await createUserAPI(formData).then(res => res.json());
+  if (response.ok) {
+    alert(response.message);
+    setLoading(isLoading => false);
+    navigate('/dashboard');
+  } else {
+    switch (response.status) {
+      case 401:
+        alert(response.message);
+        setLoading(isLoading => false);
+        navigate('/dashboard');
+        break;
+      case 500:
+        alert(response.message);
+        setLoading(isLoading => false);
+        navigate('/dashboard');
+        break;
+      default:
+        alert(response.message);
+        setLoading(isLoading => false);
+        navigate('/dashboard');
+        break;
+    }
   }
 }
 
 //Handles Project Creation Functions
 export async function handleCreateProject({ formData }, isLoading, setLoading, navigate) {
   setLoading(isLoading => true)
-  const response = await createProjectAPI(formData);
-  response.ok ? (setLoading(isLoading => false), navigate('/dashboard')) : (navigate('/dashboard/create-project'), setLoading(isLoading => false));
+  const response = await createProjectAPI(formData).then(res => res.json());
+  if (response.ok) {
+    setLoading(isLoading => false);
+    alert('Project Created Succesfully');
+    navigate('/dashboard');
+  }
+  else {
+    switch (response.status) {
+      case 500:
+        alert(response.message);
+        navigate('/dashboard/create-project');
+        setLoading(isLoading => false);
+        break;
+      case 501:
+        alert(response.message);
+        navigate('/dashboard/');
+        setLoading(isLoading => false);
+        break;
+      case 502:
+        alert(response.message);
+        navigate('/dashboard');
+        setLoading(isLoading => false);
+        break;
+      default:
+        alert('Unspecified error, try again');
+        navigate('/dashboard/create-project');
+        setLoading(isLoading => false);
+        break;
+    }
+  }
+}
+
+//Handles creation of blogs
+export async function handleCreateBlog({ formData }, isLoading, setLoading, navigate) {
+  setLoading(isLoading => true);
+  const response = await createBlogAPI(formData).then(res => res.json());
+  setLoading(isLoading => false);
+  if (response.ok) {
+    alert('Blog created successfully');
+    setLoading(isLoading => false);
+    navigate('/blogs');
+  } else {
+    switch (response.status) {
+      case 500:
+        alert(response.message);
+        setLoading(isLoading => false);
+        navigate('/dashboard');
+        break;
+      case 502:
+        alert(response.message);
+        setLoading(isLoading => false);
+        navigate('/dashboard');
+        break;
+      default:
+        alert('Unspecified error, try again'); 
+        setLoading(isLoading => false);
+        navigate('/dashboard');
+        break;
+    }
+  }
 }
 
 //Handle delete project
-export async function handleDeleteProject(id){
+export async function handleDeleteProject(id) {
   const response = await deleteProjectAPI(id)
   console.log(response)
 }
@@ -52,7 +139,7 @@ export async function handleGetProjects({ formData }, isLoading, setLoading, nav
 }
 
 //Handle CV Download.
-export async function resumeDownloadHandler(){
+export async function resumeDownloadHandler() {
   const link = document.createElement("a");
   link.href = "../client/assets/docs/AssistantOperatorSolventplant.pdf";
   link.download = "AssistantOperatorSolventplant.pdf";
@@ -60,6 +147,7 @@ export async function resumeDownloadHandler(){
 
 }
 
-export async function handleChangePassword(formData){
+export async function handleChangePassword(formData) {
   const response = resetPasswordAPI(formData);
 }
+

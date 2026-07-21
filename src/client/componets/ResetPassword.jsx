@@ -65,7 +65,7 @@ export function ResetPassword() {
                 value={form.newPassword}
                 onChange={handleChange}
             />
-            <input className="reset-password-btn" type="submit" value="Reset" />
+            <button className="reset-password-btn" type="submit" value="Reset">Reset</button>
         </form>
         </section>
         

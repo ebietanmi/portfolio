@@ -1,4 +1,4 @@
-import express, { json } from 'express';
+import express, { json, response } from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -13,12 +13,13 @@ import {
     deleteProjectSQL, updatePasswordSQL, createRecievedMailSQL,
     getBlogsSQL
 } from './controllers/database_controller.js';
+import { errorMonitor } from 'events';
 
 
-cloudinary.config({ 
-  cloud_name:process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret:process.env.CLOUDINARY_API_SECRET
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 
 });
 
@@ -34,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 // Handles and report errors tha may arise while starting the server.
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(500).json({ 'message': 'Something broke!' });
 })
 
 //This API route handles te creation of new user.
@@ -58,20 +59,19 @@ export async function createUser() {
             const hashedPassword = await bcrypt.hash(password, 10);
             const response = await createUserSQL(username, hashedPassword, role);
             if (response.ok) {
-                console.log(response)
-                res.status(201).send({ 'ok': true, 'message': response.SQLMessage, userId: response.insertId });
+                res.status(201).json({ 'ok': true, 'status': 201, 'message': response.SQLMessage, userId: response.insertId });
             }
             else if (response.taken) {
-                res.status(401).send({ 'ok': false, 'message': response.SQLMessage });
+                res.status(401).json({ 'ok': false, 'status': 401, 'message': response.SQLMessage });
             }
             else {
-                res.status(500).send({ 'ok': false, 'message': response.SQLMessage })
+                res.status(500).json({ 'ok': false, 'status': 500, 'message': response.SQLMessage })
             }
 
         }
         catch (error) {
             if (error instanceof Error)
-                res.status(500).send({ 'ok': false, error: 'An error occurred while creating user' });
+                res.status(500).json({ 'ok': false, 'status': 500, 'message': 'An error occurred while creating user' });
         }
     }
     );
@@ -110,7 +110,7 @@ export async function logIn() {
         try {
             const user = await checkUserSQL(username);
             if (user === null) {
-                res.status(401).send({ message: "Invalid Username or Password" })
+                res.status(401).json({ 'message': "Invalid Username or Password" })
             } else {
                 const isMatch = await bcrypt.compare(password, user.password);
                 if (isMatch) {
@@ -118,9 +118,9 @@ export async function logIn() {
                         process.env.JWT_SECRET,
                         { expiresIn: '15m' }
                     );
-                    res.status(201).send({ token, sucess: true, id: user.id, user: username });
+                    res.status(201).json({ token, 'ok': true, id: user.id, user: username });
                 }
-                else { res.status(401).json({ sucess: false }) }
+                else { res.status(401).json({ 'ok': false }) }
             }
         } catch (error) {
             res.status(500).send(error);
@@ -130,36 +130,45 @@ export async function logIn() {
 
 //This API route handles the creation of new user.
 async function createProject() {
-
     // This sets up multer to facilitate uploading of file.
-    const storage = multer.diskStorage({
-        destination: "./assets/projects",
-        filename: (req, file, callback) => {
-            const uniqueName = Date.now() + path.extname(file.originalname);
-            callback(null, uniqueName);
-        }
+    const storage = multer.memoryStorage();
+    const upload = multer({
+        storage,
+        limits: { fileSize: 5 * 1024 * 1024 }
     });
-    const upload = multer({ storage });
 
     await app.post('/create-project', upload.single('img_file'), async (req, res) => {
         const { project_title, project_author, project_description } = req.body;
-        const imgPath = `./assets/projects/${req.file.filename}`;
-
         try {
-            const response = await createProjectSQL(
+            const result = await new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream(
+                    { folder: 'portfolio/projects' }, // path for desired cloudinary folder
+                    (error, result) => {
+                        if (error) reject(error)
+                        else resolve(result)
+                    }
+                ).end(req.file.buffer)
+            })
+            const project_img_url = result.secure_url;
+            const project_public_id = result.public_id;
+            const sql_response = await createProjectSQL(
                 project_title,
                 project_author,
                 project_description,
-                imgPath
-            );
-            if (response.affectedRows > 0) {
-                res.status(200).send({ success: true });
+                project_img_url,
+                project_public_id
+            )
+            if (sql_response.affectedRows > 0) {
+                res.status(200).json({ 'status': 200, 'ok': true, 'message': 'project created succesfully', });
             } else {
-                res.status(500).send({ success: false })
+                res.status(501).json({ 'status': 502, 'ok': false, 'message': 'unable to create project', })
             }
-
         } catch (error) {
-            res.status(500).send({ error: error })
+            if (error.errno === -3008) {
+                res.status(502).json({ 'ok': false, 'status': 501, 'message': 'Could not connect, please check your internet' });
+            } else {
+                res.status(500).json({ 'ok': false, 'status': 500, 'message': 'Internal Server error, try later' });
+            }
         }
 
     })
@@ -204,31 +213,46 @@ export async function deleteProject() {
 //This API route handles the creation of new blog.
 async function CreateBlog() {
     //Multer set up for blog
-    const storage = multer.diskStorage({
-        destination: "./assets/blogs",
-        filename: (req, file, callback) => {
-            const uniqueName = Date.now() + path.extname(file.originalname);
-            callback(null, uniqueName);
-        }
+    const storage = multer.memoryStorage();
+    const upload = multer({
+        storage,
+        limits: { fileSize: 5 * 1024 * 1024 }
     });
-    const upload = multer({ storage });
-
     await app.post('/create-blog', upload.single('blog_file'), async (req, res) => {
-        const { blog_title, blog_excerpt, blog_creation_date, blog_category } = req.body;
-        const blog_img_path = `./assets/blogs/${req.file.filename}`;
-
+        const { blog_title, blog_excerpt, blog_content, blog_creation_date, blog_category } = req.body;
         try {
-            const response = await createBlogSQL(
-                { blog_title, blog_excerpt, blog_creation_date, blog_category, blog_img_path }
+            const result = await new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream(
+                    { folder: 'portfolio/blogs' }, // optional folder in Cloudinary
+                    (error, result) => {
+                        if (error) reject(error)
+                        else resolve(result)
+                    }
+                ).end(req.file.buffer)
+            })
+            const blog_img_url = result.secure_url;
+            const blog_public_id = result.public_id;
+
+            const sql_response = await createBlogSQL(
+                {
+                    blog_title, blog_excerpt, blog_content, blog_creation_date,
+                    blog_category, blog_img_url, blog_public_id
+                }
             );
-            if (response.ok) {
-                res.status(200).send({ 'ok': true, 'message': response.SQLMessage });
+            if (sql_response.affectedRows > 0) {
+                console.log(sql_response)
+                res.status(200).json({'status':200, 'ok': true, 'message': response.SQLMessage });
             } else {
-                res.status(500).send({ 'ok': false, 'message': response.SQLMessage })
+                res.status(500).json({'status':500, 'ok': false, 'message': response.SQLMessage })
             }
 
         } catch (error) {
-            res.status(500).send({ error: error, 'ok': false })
+            console.error(error);
+            if (error.errno === -3008) {
+                res.status(502).json({'status': 502, 'ok': false,  'message': 'Could not connect, please check your internet' });
+            } else {
+                res.status(500).json({'status': 500,  'ok': false, 'message': 'Internal Server error, try later' });
+            }
         }
 
     })
@@ -284,62 +308,6 @@ export async function resetPassword() {
 
 }
 
-
-// import nodemailer from "nodemailer";
-
-// const transporter = nodemailer.createTransport({
-//   service: "gmail", // or use host/port below
-//   auth: {
-//     user: process.env.EMAIL_USER, // your gmail
-//     pass: process.env.EMAIL_PASS, // NOT your gmail password. See below
-//   },
-// });
-
-// const sendEmail = async () => {
-//   try {
-//     const info = await transporter.sendMail({
-//       from: '"Your Name" <you@gmail.com>',
-//       to: "nachurboi@gmail.com",
-//       subject: "Test Email",
-//       text: "Hello from Node.js",
-//       html: "<b>Hello from Node.js</b>",
-//     });
-
-//     console.log("Message sent:", info.messageId);
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// };
-
-// sendEmail();
-
-// Create a transporter using SMTP
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: process.env.SMTP_USER,
-//         pass: process.env.SMTP_PASS,
-//     },
-// });
-
-
-// async function SendMail(name, email, message) {
-  
-//     try {  
-//         const mailOptions = {
-//         from: `${email}`,
-//         to: `${process.env.SMTP_USER}`,
-//         subject: `Message form ${name}`,
-//         text: `${message}`
-//     };
-//         await transporter.verify();
-//         transporter.sendMail(mailOptions, (error, info) => {
-//             error ? console.log(error) : console.log(`Email sent: ${info.response}`)
-//         })
-//     } catch (err) {
-//         console.error("Verification failed:", err);
-//     }
-// }
 
 export async function createRecievedMail() {
     await app.post("/send-mail", async (req, res) => {

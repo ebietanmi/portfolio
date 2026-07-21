@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import mysql2 from 'mysql2';
 import bcrypt from 'bcrypt'
+import { response } from 'express';
 dotenv.config();
 
 
@@ -10,9 +11,10 @@ async function createProjectSchema(pool) {
     id INT PRIMARY KEY AUTO_INCREMENT,
     project_title VARCHAR(255) NOT NULL,
     project_author VARCHAR(255) DEFAULT "No Author",
-    project_description VARCHAR(255) DEFAULT "No Description",
+    project_description TEXT,
     project_date_created DATETIME DEFAULT NOW(),
-    project_img_url VARCHAR(255) 
+    project_img_url VARCHAR(255),
+    project_public_id VARCHAR(255)
 )`
     pool.query(query)
 }
@@ -22,9 +24,11 @@ async function createBlogSchema(pool) {
     id INT PRIMARY KEY AUTO_INCREMENT,
     blog_title VARCHAR(255) NOT NULL,
     blog_excerpt VARCHAR(255) DEFAULT "No excerpt",
+    blog_content TEXT,
     blog_creation_date DATETIME DEFAULT NOW(),
     blog_category VARCHAR(255) NOT NULL,
-    blog_img_path VARCHAR(255) 
+    blog_img_url VARCHAR(255),
+    blog_public_id VARCHAR(255)
 )`
     pool.query(query)
 }
@@ -107,7 +111,7 @@ export async function createUserSQL(username, password, role) {
     try {
         const [response] = await pool.query(query, [username, password, role]);
         if (response.affectedRows > 0) {
-            return { 'ok': true, "SQLMessage": 'User created succesfully', 'insertId':response.insertId}
+            return { 'ok': true, "SQLMessage": 'User created succesfully', 'insertId': response.insertId }
         }
         else {
             return { 'ok': false, "SQLMessage": 'Failed to create user' }
@@ -153,37 +157,39 @@ export async function checkUserSQL(username) {
     else return { "SQLMessage": 'User not found' };
 }
 
-export async function createProjectSQL(project_title, project_author, project_description, project_img_url) {
+export async function createProjectSQL(project_title, project_author,
+    project_description, project_img_url, project_public_id) {
     const query = `INSERT INTO project_table ( 
     project_title,
     project_author,
     project_description, 
-    project_img_url
+    project_img_url,
+    project_public_id
     ) 
-    VALUES(?,?,?,?)`;
-    const [result] = await pool.query(
-        query, [project_title, project_author, project_description, project_img_url]
+    VALUES(?,?,?,?,?)`;
+    const [response] = await pool.query(
+        query, [project_title, project_author, project_description, project_img_url, project_public_id]
     );
-    return result;
+    return response;
 }
-export async function createBlogSQL({ blog_title, blog_excerpt, blog_creation_date, blog_category, blog_img_path }) {
+
+
+export async function createBlogSQL({ blog_title, blog_excerpt, blog_content,
+    blog_creation_date, blog_category, blog_img_url, blog_public_id }) {
     const query = `INSERT INTO blog_table ( 
     blog_title,
     blog_excerpt,
+    blog_content,
     blog_creation_date,
     blog_category,
-    blog_img_path
+    blog_img_url,
+    blog_public_id
     ) 
-    VALUES(?,?,?,?,?)`;
-    const [result] = await pool.query(
-        query, [blog_title, blog_excerpt, blog_creation_date, blog_category, blog_img_path]
+    VALUES(?,?,?,?,?,?,?)`;
+    const [response] = await pool.query(
+        query, [blog_title, blog_excerpt, blog_content, blog_creation_date, blog_category, blog_img_url, blog_public_id ]
     );
-    if (result.affectedRows > 0) {
-        return ({ 'ok': true, 'SQLMessage': 'Blog succesfully created' })
-    }
-    else {
-        return ({ 'ok': false, 'SQLMessage': 'Blog creation failed' });
-    }
+    return response;
 }
 
 export async function getBlogsSQL() {

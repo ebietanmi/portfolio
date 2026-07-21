@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import "./Blog.css";
 
 export default function Blog() {
+    const navigate = useNavigate();
     const [blogs, setBlogs] = useState([]);
     const fetchBlogs = useCallback(()=>{
         getBlogsAPI().
@@ -22,7 +23,10 @@ export default function Blog() {
   const filteredPosts = selectedCategory === "All" 
     ? blogs 
     : blogs.filter(b => b.blog_category === selectedCategory);
-    const navigate = useNavigate();
+    
+    function previewBlog(blog){
+        navigate(`/blogs/${blog.id}`, {state:{blog:blog}});
+    }
   return (
     <section className="blog-section">
       <FontAwesomeIcon  onClick={()=>navigate('/')} style={{marginBottom:'1rem'}} icon={faArrowLeft}/> 
@@ -54,7 +58,7 @@ export default function Blog() {
           {filteredPosts.map(blog => (
             <article key={blog.id} className="blog-card">
               <div className="card-image-wrap">
-                <img src={`src/server/${blog.blog_img_path}`} alt={blog.blog_title} className="card-image" />
+                <img src={`${blog.blog_img_url}`} alt={blog.blog_title} className="card-image" />
                 <span className="card-category">{blog.blog_category}</span>
               </div>
               
@@ -67,10 +71,12 @@ export default function Blog() {
                 
                 <h3 className="card-title">{blog.blog_title}</h3>
                 <p className="card-excerpt">{blog.blog_excerpt}</p>
-                
-                <a href={`/blog/${blog.id}`} className="card-link">
+                <button 
+                onClick={()=>{previewBlog(blog)}}
+                className="card-link"
+                >
                   Read Article →
-                </a>
+                </button>
               </div>
             </article>
           ))}

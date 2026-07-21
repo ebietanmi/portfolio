@@ -56,11 +56,7 @@ function Homepage() {
                                 return (
                                     <ProjectCard
                                         key={project.id}
-                                        title={project.project_title}
-                                        author={project.project_author}
-                                        description={project.project_description}
-                                        date_created={project.project_date_created}
-                                        img_url={project.project_img_url}
+                                        project={project}
                                     />
                                 )
                             },) : <><h4 style={{ color: 'gray' }}>No Project available at this time..</h4></>

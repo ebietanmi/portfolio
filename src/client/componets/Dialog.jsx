@@ -32,7 +32,7 @@ export function Dialog({
     }
     return <div className="dialog-box">
         <h4 className="dialog-header">CONFIRM OPERATION</h4>
-        <ScaleLoader height={10} width={3} loading={isLoading} />
+        <ScaleLoader height={10} loading={isLoading} />
         <div className="dialog-action-btn-wrapper">
             <input onClick={() => {
                 cancelDelete()

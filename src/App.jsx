@@ -14,7 +14,8 @@ import About from './client/pages/About.jsx';
 import Contact from './client/pages/Contact.jsx';
 import Blog from './client/pages/Blog.jsx';
 import CreateBlog from './client/pages/CreateBlog.jsx';
-import PreviewProject from './client/pages/PreviewProject.jsx';
+import ProjectViewMore from './client/pages/ProjectViewMore.jsx';
+import BlogViewMore from './client/pages/BlogViewMore.jsx';
 
 
 
@@ -39,8 +40,8 @@ const router = createBrowserRouter([
       }
     },
     element: <Dashboard/> },
-    {path:`/dashboard/project/:id`,
-      element:<PreviewProject/>},
+    {path:`/project/:id`,
+      element:<ProjectViewMore/>},
     {path:'/dashboard/create-user',
       loader:async ()=>{
       const token = localStorage.getItem("token");
@@ -80,7 +81,8 @@ const router = createBrowserRouter([
     },
     element: <CreateBlog/> },
   {path:'/contact', element:<Contact/>},
-  {path:'/blog', element:<Blog/>},
+  {path:'/blogs', element:<Blog/>},
+  {path:'/blogs/:id', element:<BlogViewMore/>},
   { path: '*', element: <Page404/> },
 ])
 

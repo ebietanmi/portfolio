@@ -16,15 +16,16 @@ export default function CreateProject() {
       <div className="project-editor-wrapper">
         <div className="project-editor-header">
           <h6 className="project-editor-header-text">Project</h6>
-          <ScaleLoader style={{alignSelf:"center"}} height={10} width={3} loading={isLoading} />
+          <ScaleLoader style={{ alignSelf: "center" }} height={10} width={3} loading={isLoading} />
           <FontAwesomeIcon className="project-editor-header-add-icon" icon={faAdd} size="1.5x" />
         </div>
         <hr className="hr-line" />
         <div className="form-wrapper">
           <form onSubmit={(e) => {
             e.preventDefault();
-             const formData = new FormData(e.target);            
+            let formData = new FormData(e.target);
             handleCreateProject({ formData }, isLoading, setLoading, navigate)
+            formData = new FormData();
           }} method="post">
             <h5 className="project-textbox-label">Project Title</h5>
             <input required type="text" name="project_title" id="id-project-title" className="project-textbox" />
@@ -33,12 +34,12 @@ export default function CreateProject() {
             <h5 className="project-textbox-label">Project Description</h5>
             <input required type="text" name="project_description" id="" className="project-textbox" />
             <h5 className="project-textbox-label">Project Thumbnail</h5>
-            <input className="project-select-file" type="file" name="img_file" id="fileID"/>
+            <input required className="project-select-file" type="file" name="img_file" id="fileID" />
             <FontAwesomeIcon icon={faFile} color="var(--accentColor)"></FontAwesomeIcon>
             <hr className="hr-line" />
             <div className="action-wrapper">
-              <input className=" action-btn save-btn" type="submit" value="Save" />
-              <input className=" action-btn cancel-btn" type="button" value="Cancel" />
+              <button className=" action-btn save-btn" type="submit" value="Save">Save</button>
+              <button className=" action-btn cancel-btn" type="button" value="Cancel">Cancel</button>
             </div>
           </form>
         </div>
