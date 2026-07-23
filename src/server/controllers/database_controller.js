@@ -48,6 +48,7 @@ async function createRecievedMailSchema(pool) {
     id INT PRIMARY KEY AUTO_INCREMENT,
     sender_name VARCHAR(255) NOT NULL,
     sender_email VARCHAR(255) NOT NULL,
+    subject VARCHAR(255) DEFAULT 'Message from portfolio website',
     message    VARCHAR(255) NOT NULL
 )`
     pool.query(query)
@@ -88,7 +89,7 @@ async function ensureDatabaseExists() {
         await createRecievedMailSchema(pool);
         await createBlogSchema(pool);
     } else {
-        console.log("Database already exists");
+        null;
     }
     await connenction.end();
 }
@@ -248,15 +249,16 @@ export async function deleteProjectSQL(id) {
     }
 }
 
-export async function createRecievedMailSQL(sender_name, sender_email, message) {
+export async function createRecievedMailSQL(sender_name, sender_email, subject, message) {
     const query = `INSERT INTO recieved_email_table ( 
     sender_name,
     sender_email,
+    subject,
     message
     ) 
-    VALUES(?,?,?)`;
+    VALUES(?,?,?,?)`;
     const [result] = await pool.query(
-        query, [sender_name, sender_email, message]
+        query, [sender_name, sender_email, subject, message]
     );
     if (result.affectedRows > 0) {
         return { "SQLMessage": 'Message sent saved', "ok": true }

@@ -25,7 +25,6 @@ export const loginAPI = async (credentials) => {
 
 // API for resetting password
 export async function resetPasswordAPI(credentials) {
-  // console.log(JSON.stringify(credentials));
   const response = await fetch('/api/reset-password', {
     method: "PUT",
     headers: {
@@ -77,27 +76,30 @@ export const deleteProjectAPI = async (id) => {
       body: formData,
       credentials: 'include'
     });
-    // console.log(response)
   return response;
 }
   export async function getBlogsAPI(formData) {
- const response = await fetch("/api/blog",{method: 'GET'});
+ const response = await fetch("/api/blog",{method:'GET'});
   return response;
 }
   export async function getUsersAPI(formData) {
- const response = await fetch("/api/users",{method: 'GET'});
+ const response = await fetch("/api/users",{method:'GET'});
   return response;
 }
 
 
+export async function checkMailNetworkStatusAPI(){
+  const response = await fetch('/api/check-mail-network',{method:'GET'});
+  return response;
+}
 
-export async function createRecievedMailAPI(credentials) {
+export async function sendMailAPI(form) {
   const response = await fetch('/api/send-mail', {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(credentials),
+    body: JSON.stringify(form),
     credentials: 'include'
   });
   return response;

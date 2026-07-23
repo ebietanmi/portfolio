@@ -1457,9 +1457,24 @@ margin:2rem 0px;
   font-family: system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   overflow: hidden;
 }
+.contact-network-status{
+  font-family: var(--mono);
+  font-size: xx-small;
+  color: var(--coolBackgroundColor);
+  font-style: italic;
+  animation: blink 2s step-start infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: .5;
+  }
+}
+
 
 .contact-container {
   font-family: var(--mono);

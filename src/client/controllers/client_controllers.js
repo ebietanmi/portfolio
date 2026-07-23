@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import createUserAPI, { createProjectAPI, createBlogAPI, deleteProjectAPI, loginAPI, resetPasswordAPI } from "./APIs";
+import createUserAPI, { createProjectAPI, createBlogAPI, deleteProjectAPI, loginAPI, resetPasswordAPI, sendMailAPI } from "./APIs";
 import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -117,7 +117,7 @@ export async function handleCreateBlog({ formData }, isLoading, setLoading, navi
         navigate('/dashboard');
         break;
       default:
-        alert('Unspecified error, try again'); 
+        alert('Unspecified error, try again');
         setLoading(isLoading => false);
         navigate('/dashboard');
         break;
@@ -128,7 +128,6 @@ export async function handleCreateBlog({ formData }, isLoading, setLoading, navi
 //Handle delete project
 export async function handleDeleteProject(id) {
   const response = await deleteProjectAPI(id)
-  console.log(response)
 }
 
 //Handles Getting Single Project Functions
@@ -151,3 +150,15 @@ export async function handleChangePassword(formData) {
   const response = resetPasswordAPI(formData);
 }
 
+
+export async function handleSendMail(form, isLoading, setLoading) {
+  setLoading(isLoading => true);
+  const response = await sendMailAPI(form).then(res => res.json());
+  if (response.ok) {
+    alert(response.message);
+    setLoading(isLoading => false);
+  } else {
+    alert(response.message);
+    setLoading(isLoading => false);
+  }
+}

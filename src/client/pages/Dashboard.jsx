@@ -47,7 +47,6 @@ function Dashboard() {
     }
     function handleRightClick(e) {
         e.preventDefault();
-        console.log("Right Clicked", e.clientX, e.clientY, e);
     }
 
     return (

@@ -5,7 +5,6 @@ export default function PreviewProject() {
     const location = useLocation();
     const { id } = useParams();
     const project = location.state?.project;
-    console.log(project);
     return (
         <div className="preview-wrapper">
             <div className="preview-container">

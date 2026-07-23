@@ -240,18 +240,17 @@ async function CreateBlog() {
                 }
             );
             if (sql_response.affectedRows > 0) {
-                console.log(sql_response)
-                res.status(200).json({'status':200, 'ok': true, 'message': response.SQLMessage });
+                res.status(200).json({ 'status': 200, 'ok': true, 'message': response.SQLMessage });
             } else {
-                res.status(500).json({'status':500, 'ok': false, 'message': response.SQLMessage })
+                res.status(500).json({ 'status': 500, 'ok': false, 'message': response.SQLMessage })
             }
 
         } catch (error) {
             console.error(error);
             if (error.errno === -3008) {
-                res.status(502).json({'status': 502, 'ok': false,  'message': 'Could not connect, please check your internet' });
+                res.status(502).json({ 'status': 502, 'ok': false, 'message': 'Could not connect, please check your internet' });
             } else {
-                res.status(500).json({'status': 500,  'ok': false, 'message': 'Internal Server error, try later' });
+                res.status(500).json({ 'status': 500, 'ok': false, 'message': 'Internal Server error, try later' });
             }
         }
 
@@ -308,28 +307,74 @@ export async function resetPassword() {
 
 }
 
+// EMAIL SETUP
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.USER_EMAIL_PASSWORD
+    }
+});
 
-export async function createRecievedMail() {
-    await app.post("/send-mail", async (req, res) => {
+// CHECK FOR CONNECTIVITY
+async function checkMailNetworkStatus() {
+    await app.get('/check-mail-network', async (req, res) => {
         try {
-            const { name, email, message } = req.body;
-            const response = await createRecievedMailSQL(name, email, message);
-            if (response.ok) {
-                res.status(200).send({ "message": 'Message saved', "ok": true });
-                // await SendMail(name, email, message);
-            } else {
-                res.status(500).send({ "message": 'Unable to save message', "ok": false })
-            }
+            const response = await transporter.verify(
+                (error, success) => {
+                    if (error) {
+                        res.status(501).json({ 'status': 500, 'ok': false, "message": 'Network is unstable' })
+                    } else {
+                        res.status(201).json({ 'status': 201, 'ok': true, "message": 'Network is stable send mail' })
+                    }
+                }
+            );
         } catch (error) {
-
+            res.status(500)
+                .json({ 'status': 500, 'ok': false, "message": 'Network unstable or server error, try again later' })
         }
     })
+}
+
+export async function sendAndSaveMail() {
+    await app.post("/send-mail", async (req, res) => {
+        const { name, email, subject, message } = req.body;
+        const mailOptions = {
+            name: name,
+            email: email, subject: subject,
+            text: message,
+            to: process.env.USER_EMAIL
+        }
+        try {
+            await transporter.sendMail(mailOptions, async (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    res.status(500).json({ 'ok': false, 'message': 'Unable to send email' });
+                }
+                else {
+                    const sql_response = await createRecievedMailSQL(mailOptions.name, mailOptions.email, mailOptions.subject, mailOptions.text);
+                    if (sql_response.ok) {
+                        res.status(200).json({ 'ok': true, 'message': 'Email sent successfully' })
+                    }
+                    else {
+                        res.status(500).json({ 'ok': false, 'message': 'Email sent but not saved' })
+                    }
+                }
+            }
+            );
+        } catch (error) {
+            res.status(500).json({ 'ok': false, 'message': 'Internal Server error, Email not sent' })
+        }
+    }
+    );
 }
 
 
 // Starting the server.
 app.listen(PORT, () => {
-    console.log(`App is listening on port ${PORT}`)
+    console.log(`Sever is up and running on port ${PORT}`)
 });
 
 
@@ -343,6 +388,7 @@ getProject()
 getProjects();
 deleteProject();
 resetPassword();
-createRecievedMail();
+sendAndSaveMail();
 CreateBlog();
 getBlogs();
+checkMailNetworkStatus();
