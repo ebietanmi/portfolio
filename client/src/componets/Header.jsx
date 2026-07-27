@@ -1,4 +1,4 @@
-import logo from '../../assets/logo.jpg'
+import logo from '../../../assets/logo.jpg'
 import { useState } from 'react';
 import { Link, redirect, useNavigate, } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

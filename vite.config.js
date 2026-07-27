@@ -7,7 +7,7 @@ export default defineConfig({
   server:{
     proxy:{
       '/api':{
-        target:process.env.API_DOMAIN,
+        target:process.env.VITE_HOST,
         changeOrigin:true,
         rewrite:(path)=>path.replace(/^\/api/,'')
       }

@@ -1,26 +1,26 @@
 import { useState } from 'react';
 import './App.css';
-import Homepage from './client/pages/Homepage.jsx';
-import Dashboard from './client/pages/Dashboard.jsx';
-import ProjectEditor from './client/pages/CreateProject.jsx';
+import Homepage from './src/pages/Homepage';
+import Dashboard from './src/pages/Dashboard.jsx';
+import ProjectEditor from './src/pages/CreateProject.jsx';
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider, redirect } from 'react-router-dom';
-import Page404 from './client/pages/Page404.jsx';
-import LoginPage from './client/pages/LoginPage.jsx';
-import { ProtectedDashboardRoute, ProtectedLoginRoute, authenticateUser } from './client/componets/auth/Auth.jsx';
-import CreateProject from './client/pages/CreateProject.jsx';
+import Page404 from './src/pages/Page404.jsx';
+import LoginPage from './src/pages/LoginPage.jsx';
+import { ProtectedDashboardRoute, ProtectedLoginRoute, authenticateUser } from './src/componets/auth/Auth.jsx';
+import CreateProject from './src/pages/CreateProject.jsx';
 import { jwtDecode } from 'jwt-decode';
-import CreateUser from './client/pages/CreateUser.jsx';
-import About from './client/pages/About.jsx';
-import Contact from './client/pages/Contact.jsx';
-import Blog from './client/pages/Blog.jsx';
-import CreateBlog from './client/pages/CreateBlog.jsx';
-import ProjectViewMore from './client/pages/ProjectViewMore.jsx';
-import BlogViewMore from './client/pages/BlogViewMore.jsx';
+import CreateUser from './src/pages/CreateUser.jsx';
+import About from './src/pages/About.jsx';
+import Contact from './src/pages/Contact.jsx';
+import Blog from './src/pages/Blog.jsx';
+import CreateBlog from './src/pages/CreateBlog.jsx';
+import ProjectViewMore from './src/pages/ProjectViewMore.jsx';
+import BlogViewMore from './src/pages/BlogViewMore.jsx';
 
 
 
 const router = createBrowserRouter([
-  { path: '/', element: <Homepage/> },
+  { path: '/', element:<Homepage/> },
   { path: '/login', element: <LoginPage/> },
   { path: '/dashboard', 
     loader: async ()=>{

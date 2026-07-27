@@ -1,4 +1,6 @@
 
+const API = import.meta.env.API_URL;
+
 export default async function createUserAPI(credentials) {
   const response = await fetch('/api/create-user', {
     method: "POST",
@@ -51,7 +53,8 @@ export const createProjectAPI = async (formData) => {
 
 // API to get all project.
 export const getProjectsAPI = async () => {
-  const data = await fetch("/projects");
+  const data = await fetch("/api/projects");
+  console.log(data)
   return data;
 }
 

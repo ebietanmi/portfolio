@@ -1,5 +1,5 @@
 import Header from '../componets/Header.jsx';
-import logo from '../../assets/logo.jpg';
+import logo from '../../../assets/logo.jpg'
 import ProjectCard from '../componets/ProjectCard.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getProjectsAPI } from '../controllers/APIs.js';
@@ -28,9 +28,7 @@ function Homepage() {
             <div className="home-content-wrapper">
                  <div className="home-top-content"> 
                     <div className='home-top-content-left'>
-                        <div className="avatar">
-                            
-                        </div>
+                        <div className="avatar"></div>
                         <h1 id='dev-name'>Ebietanmi Taiwo</h1>
                         <p id='dev-pos'>Software Engineer</p>
                         <div className="skills">
