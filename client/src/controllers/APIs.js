@@ -58,7 +58,6 @@ export const createProjectAPI = async (formData) => {
 // API to get all project.
 export const getProjectsAPI = async () => {
   const data = await fetch(`${API_URL}/projects`);
-  console.log(data)
   return data;
 }
 

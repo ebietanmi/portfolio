@@ -132,7 +132,7 @@ export async function handleDeleteProject(id) {
 }
 
 //Handles Getting Single Project functions
-export async function handleGetProjects({ formData }, isLoading, setLoading, navigate) {
+export async function handleCreateProjects({ formData }, isLoading, setLoading, navigate) {
   setLoading(isLoading => true)
   const response = await createProjectAPI(formData);
   response.ok ? (setLoading(isLoading => false), navigate('/')) : (navigate('/dashboard/create-project'), setLoading(isLoading => false));

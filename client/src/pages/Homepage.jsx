@@ -15,7 +15,8 @@ function Homepage() {
     const fetchProjects = useCallback(() => {
         getProjectsAPI()
             .then(res => res.json())
-            .then(setProjects);
+            .then(setProjects)
+            .then(res=> console.log(res));
     }, []); // empty deps = function never changes
 
     useEffect(() => {
