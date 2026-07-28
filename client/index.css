@@ -1918,6 +1918,7 @@ margin:2rem 0px;
   /* 3 line truncate */
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp:unset;
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-width: 0;
