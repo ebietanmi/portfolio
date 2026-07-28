@@ -127,12 +127,14 @@ export async function handleCreateBlog({ formData }, isLoading, setLoading, navi
 }
 
 //Handle delete project functions
-export async function handleDeleteProject(id) {
-  const response = await deleteProjectAPI(id)
+export async function handleDeleteProject(id, isLoading, setLoading) {
+  setLoading(isLoading => true)
+  const response = await deleteProjectAPI(id);
+  response.ok ? (setLoading(isLoading => false), navigate('/dashboard')) : (navigate('/dashboard'), setLoading(isLoading => false));
 }
 
 //Handles Getting Single Project functions
-export async function handleCreateProjects({ formData }, isLoading, setLoading, navigate) {
+export async function handleGetProjects({ formData }, isLoading, setLoading, navigate) {
   setLoading(isLoading => true)
   const response = await createProjectAPI(formData);
   response.ok ? (setLoading(isLoading => false), navigate('/')) : (navigate('/dashboard/create-project'), setLoading(isLoading => false));
