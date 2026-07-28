@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config;
 
-
-// const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'https://portfoliobackend-production-7d3c.up.railway.app';
+const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = 'https://portfoliobackend-production-7d3c.up.railway.app';
 
 export default async function createUserAPI(credentials) {
   const response = await fetch(`${API_URL}/create-user`, {
