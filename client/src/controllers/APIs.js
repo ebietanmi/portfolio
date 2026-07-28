@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.BACKEND_API;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default async function createUserAPI(credentials) {
   const response = await fetch(`${API_URL}/create-user`, {
@@ -75,7 +75,6 @@ export const deleteProjectAPI = async (id) => {
     {
       method: 'POST',
       body: formData,
-      credentials: 'include'
     });
   return response;
 }
@@ -101,7 +100,6 @@ export async function sendMailAPI(form) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(form),
-    credentials: 'include'
   });
   return response;
 }
