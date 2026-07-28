@@ -79,7 +79,7 @@ export const deleteProjectAPI = async (id) => {
   return response;
 }
   export async function getBlogsAPI(formData) {
- const response = await fetch(`${API_URL}/api/blog`,{method:'GET'});
+ const response = await fetch(`${API_URL}/blog`,{method:'GET'});
   return response;
 }
   export async function getUsersAPI(formData) {
