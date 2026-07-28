@@ -1,5 +1,6 @@
-
-// const API = 'https://portfoliobackend-production-7d3c.up.railway.app';
+import dotenv from 'dotenv';
+dotenv.config();
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default async function createUserAPI(credentials) {
   const response = await fetch(`/create-user`, {
@@ -16,7 +17,7 @@ export default async function createUserAPI(credentials) {
 
 // API to facilitate login.
 export const loginAPI = async (credentials) => {
-  const response = await fetch(`/login`, {
+  const response = await fetch(`${API_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': `application/json` },
     body: JSON.stringify(credentials),
@@ -53,7 +54,7 @@ export const createProjectAPI = async (formData) => {
 
 // API to get all project.
 export const getProjectsAPI = async () => {
-  const data = await fetch(`/projects`);
+  const data = await fetch(`${API}`);
   console.log(data)
   return data;
 }
