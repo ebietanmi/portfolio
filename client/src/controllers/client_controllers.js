@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import createUserAPI, { createProjectAPI, createBlogAPI, deleteProjectAPI, loginAPI, resetPasswordAPI, sendMailAPI } from "./APIs";
-import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 
 //Handles Login Functions
@@ -18,6 +17,8 @@ export async function handleLogin({ username, password }, isLoading, setLoading,
   }
 }
 
+
+//Handles Logout functions
 export function handleLogout({ isLoading, setLoading, navigate }) {
   setLoading(isLoading => true);
   const token = localStorage.getItem('token');
@@ -31,7 +32,7 @@ export function handleLogout({ isLoading, setLoading, navigate }) {
   }
 }
 
-//Create User Handler
+//Create User Handler functions
 export async function handleCreateUser(formData, isLoading, setLoading, navigate) {
   setLoading(isLoading => true);
   const response = await createUserAPI(formData).then(res => res.json());
@@ -95,7 +96,7 @@ export async function handleCreateProject({ formData }, isLoading, setLoading, n
   }
 }
 
-//Handles creation of blogs
+//Handles creation of blogs functions
 export async function handleCreateBlog({ formData }, isLoading, setLoading, navigate) {
   setLoading(isLoading => true);
   const response = await createBlogAPI(formData).then(res => res.json());
@@ -125,19 +126,19 @@ export async function handleCreateBlog({ formData }, isLoading, setLoading, navi
   }
 }
 
-//Handle delete project
+//Handle delete project functions
 export async function handleDeleteProject(id) {
   const response = await deleteProjectAPI(id)
 }
 
-//Handles Getting Single Project Functions
+//Handles Getting Single Project functions
 export async function handleGetProjects({ formData }, isLoading, setLoading, navigate) {
   setLoading(isLoading => true)
   const response = await createProjectAPI(formData);
   response.ok ? (setLoading(isLoading => false), navigate('/')) : (navigate('/dashboard/create-project'), setLoading(isLoading => false));
 }
 
-//Handle CV Download.
+//Handle CV Download functions
 export async function resumeDownloadHandler() {
   const link = document.createElement("a");
   link.href = "../client/assets/docs/AssistantOperatorSolventplant.pdf";
@@ -146,11 +147,21 @@ export async function resumeDownloadHandler() {
 
 }
 
-export async function handleChangePassword(formData) {
-  const response = resetPasswordAPI(formData);
+//Handle Password Reset functions
+export async function handleChangePassword(formData, isLoading, setLoading) {
+  setLoading(isLoading => true);
+  const response = resetPasswordAPI(formData).then(res => res.json());
+  if (response.ok) {
+    alert(response.message);
+    setLoading(isLoading => false);
+  } else {
+    alert(response.message);
+    setLoading(isLoading => false);
+  }
+
 }
 
-
+//Handle sending of mail functions
 export async function handleSendMail(form, isLoading, setLoading) {
   setLoading(isLoading => true);
   const response = await sendMailAPI(form).then(res => res.json());

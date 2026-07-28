@@ -5,6 +5,7 @@ import { resetPasswordAPI } from '../controllers/APIs.js';
 
 
 export function ResetPassword() {
+    const[isLoading, setLoading] = useState(false);
     const [form, setForm] = useState({ oldPassword: '', newPassword: '' });
     const [validationMessage, setValidationMessage] = useState('');
     const [message, setMessage] = useState('');
@@ -16,7 +17,7 @@ export function ResetPassword() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const res = await resetPasswordAPI(form);
+            const res = await resetPasswordAPI(form, isLoading, setLoading);
             if (res.ok) {
                 setMessage('Password Updated')
                 alert('Password Updated')

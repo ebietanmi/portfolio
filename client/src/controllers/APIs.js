@@ -1,10 +1,8 @@
-import dotenv from 'dotenv'
-dotenv.config();
 
-const API = process.env.API;
+const API = 'https://portfoliobackend-production-7d3c.up.railway.app';
 
 export default async function createUserAPI(credentials) {
-  const response = await fetch(`${API}/create-user`, {
+  const response = await fetch('/api/create-user', {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
@@ -20,7 +18,7 @@ export default async function createUserAPI(credentials) {
 export const loginAPI = async (credentials) => {
   const response = await fetch(`${API}/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': `application/json` },
     body: JSON.stringify(credentials),
     credentials: 'include'
   });
@@ -29,7 +27,7 @@ export const loginAPI = async (credentials) => {
 
 // API for resetting password
 export async function resetPasswordAPI(credentials) {
-  const response = await fetch(`${API}/reset-password`, {
+  const response = await fetch('/api/reset-password', {
     method: "PUT",
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +41,7 @@ export async function resetPasswordAPI(credentials) {
 
 // API to facilitate creation of new project.
 export const createProjectAPI = async (formData) => {
-  const response = await fetch(`${API}/create-project`,
+  const response = await fetch(`/api/create-project`,
     {
       method: 'POST',
       body: formData,
@@ -63,7 +61,7 @@ export const getProjectsAPI = async () => {
 // API to delete project.
 export const deleteProjectAPI = async (id) => {
   try {
-    const response = await fetch(`${API}/delete-project/${id}`, { method: "DELETE" });
+    const response = await fetch(`/api/delete-project/${id}`, { method: "DELETE" });
     if (response.ok) {
       return { "Message": 'Project Deleted', ok: true }
     }
@@ -75,7 +73,7 @@ export const deleteProjectAPI = async (id) => {
 }
 
   export async function createBlogAPI(formData) {
- const response = await fetch(`${API}/create-blog`,
+ const response = await fetch(`/api/create-blog`,
     {
       method: 'POST',
       body: formData,
@@ -84,22 +82,22 @@ export const deleteProjectAPI = async (id) => {
   return response;
 }
   export async function getBlogsAPI(formData) {
- const response = await fetch(`${API}/blog`,{method:'GET'});
+ const response = await fetch("/api/blog",{method:'GET'});
   return response;
 }
   export async function getUsersAPI(formData) {
- const response = await fetch(`${API}/users`,{method:'GET'});
+ const response = await fetch(`/api/users`,{method:'GET'});
   return response;
 }
 
 
 export async function checkMailNetworkStatusAPI(){
-  const response = await fetch(`${API}/check-mail-network`,{method:'GET'});
+  const response = await fetch(`/api/check-mail-network`,{method:'GET'});
   return response;
 }
 
 export async function sendMailAPI(form) {
-  const response = await fetch(`${API}/send-mail`, {
+  const response = await fetch(`/api/send-mail`, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',

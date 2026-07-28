@@ -206,6 +206,7 @@ a {
   height: 150px;
   background: url(/assets/logo.jpg);
   background-size: cover;
+
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 100%;
