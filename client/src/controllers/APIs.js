@@ -1,8 +1,8 @@
 
-const API = 'https://portfoliobackend-production-7d3c.up.railway.app';
+// const API = 'https://portfoliobackend-production-7d3c.up.railway.app';
 
 export default async function createUserAPI(credentials) {
-  const response = await fetch('/api/create-user', {
+  const response = await fetch(`/create-user`, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export default async function createUserAPI(credentials) {
 
 // API to facilitate login.
 export const loginAPI = async (credentials) => {
-  const response = await fetch(`${API}/login`, {
+  const response = await fetch(`/login`, {
     method: 'POST',
     headers: { 'Content-Type': `application/json` },
     body: JSON.stringify(credentials),
@@ -27,7 +27,7 @@ export const loginAPI = async (credentials) => {
 
 // API for resetting password
 export async function resetPasswordAPI(credentials) {
-  const response = await fetch('/api/reset-password', {
+  const response = await fetch('/reset-password', {
     method: "PUT",
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export async function resetPasswordAPI(credentials) {
 
 // API to facilitate creation of new project.
 export const createProjectAPI = async (formData) => {
-  const response = await fetch(`/api/create-project`,
+  const response = await fetch(`/create-project`,
     {
       method: 'POST',
       body: formData,
@@ -53,7 +53,7 @@ export const createProjectAPI = async (formData) => {
 
 // API to get all project.
 export const getProjectsAPI = async () => {
-  const data = await fetch(`${API}/projects`);
+  const data = await fetch(`/projects`);
   console.log(data)
   return data;
 }
@@ -61,7 +61,7 @@ export const getProjectsAPI = async () => {
 // API to delete project.
 export const deleteProjectAPI = async (id) => {
   try {
-    const response = await fetch(`/api/delete-project/${id}`, { method: "DELETE" });
+    const response = await fetch(`/delete-project/${id}`, { method: "DELETE" });
     if (response.ok) {
       return { "Message": 'Project Deleted', ok: true }
     }
@@ -73,7 +73,7 @@ export const deleteProjectAPI = async (id) => {
 }
 
   export async function createBlogAPI(formData) {
- const response = await fetch(`/api/create-blog`,
+ const response = await fetch(`/create-blog`,
     {
       method: 'POST',
       body: formData,
@@ -86,18 +86,18 @@ export const deleteProjectAPI = async (id) => {
   return response;
 }
   export async function getUsersAPI(formData) {
- const response = await fetch(`/api/users`,{method:'GET'});
+ const response = await fetch(`/users`,{method:'GET'});
   return response;
 }
 
 
 export async function checkMailNetworkStatusAPI(){
-  const response = await fetch(`/api/check-mail-network`,{method:'GET'});
+  const response = await fetch(`/check-mail-network`,{method:'GET'});
   return response;
 }
 
 export async function sendMailAPI(form) {
-  const response = await fetch(`/api/send-mail`, {
+  const response = await fetch(`/send-mail`, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
