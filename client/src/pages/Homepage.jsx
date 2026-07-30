@@ -5,18 +5,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getProjectsAPI } from '../controllers/APIs.js';
 import { useEffect, useState, useCallback } from 'react';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import { resumeDownloadHandler } from '../controllers/client_controllers.js'
+import { ScaleLoader } from 'react-spinners';
 
 function Homepage() {
     const [isLoading, setIsloading] = useState(true);
     const [projects, setProjects] = useState([]);
+    const [isProjectAvailable, setProjectAvailable] = useState(false);
 
     const fetchProjects = useCallback(() => {
+     setTimeout(()=>{
+        console.log('time out')
+            setProjectAvailable(isProjectAvailable=>false);
+        }, 10000)
+
         getProjectsAPI()
             .then(res => res.json())
             .then(setProjects)
-            .then(res=> console.log(res));
+            .then(setProjectAvailable(isProjectAvailable => true));
     }, []); // empty deps = function never changes
 
     useEffect(() => {
@@ -58,7 +65,7 @@ function Homepage() {
                                         project={project}
                                     />
                                 )
-                            },) : <><h4 style={{ color: 'gray' }}>No Project available at this time..</h4></>
+                            },) : isProjectAvailable ? <ScaleLoader loading={isProjectAvailable} color='white'/> :<div>No avalable project...</div>
                         } 
                 </div>
             </div> 
@@ -67,20 +74,3 @@ function Homepage() {
 }
 
 export default Homepage;
-
-{/* <div className="home-bottom-section">
-                    {projects.length > 0 ?
-                        projects.map((project) => {
-                            return (
-                                <ProjectCard
-                                    key={project.id}
-                                    title={project.project_title}
-                                    author={project.project_author}
-                                    description={project.project_description}
-                                    date_created={project.project_date_created}
-                                    img_url={project.project_img_url}
-                                />
-                            )
-                        },) : <><h4 style={{ color: 'gray' }}>No Project available at this time..</h4></>
-                    } ,
-                </div> */}

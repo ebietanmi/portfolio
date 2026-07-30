@@ -1,25 +1,14 @@
 import { useLocation, useParams } from "react-router-dom";
-// import logo from '../../assets/images/logo.jpg';
-
-// import './BlogViewMore.css'
 
 function BlogViewMore() {
   const location = useLocation();
   const { id } = useParams();
   const blog = location.state?.blog;
   const blog_content = `
-    <p>Building a blog in 2026 is easier than ever, but doing it right requires attention to performance, design, and user experience.</p>
-    <h2>Why React for Blogs?</h2>
-    <p>React gives you component reusability, fast rendering, and a huge ecosystem. Pair it with a headless CMS and you have a scalable platform.</p>
-    <h2>Key Features</h2>
-    <p>Responsive design, dark mode, image optimization, and clean typography are no longer optional. Users expect speed and beauty.</p>
-    <p>Focus on writing great content first. The tech should get out of the way.</p>
-  `
+    <p>${blog.blog_content}</p>`
 
   return (
     <div className="blog_preview-container" id="blog_preview-container">
-
-      {/* Hero Section */}
       <section
         className="blog_preview-hero"
         id="blog_preview-hero"
@@ -33,8 +22,6 @@ function BlogViewMore() {
           </div>
         </div>
       </section>
-
-      {/* Content Section */}
       <article className="blog_preview-article" id="blog_preview-article">
         <p className="blog_preview-excerpt" id="blog_preview-excerpt">{blog.blog_excerpt}</p>
         <div

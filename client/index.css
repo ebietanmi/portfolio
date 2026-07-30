@@ -1662,7 +1662,6 @@ margin:2rem 0px;
 .about p{
   font-size: var(--text-sm);
   margin: clamp(.3rem, 0.5vh, .5rem);
-  /* text-align: center; */
 
 }
 
@@ -2073,9 +2072,10 @@ margin:2rem 0px;
 /* BLOG STYLES */
 .blog_preview-container {
   width: 100%;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, var(--mono);
   color:var(--coolBackgroundColor);
   background:var(--primaryBackgroundColor);
+  padding: max(.5rem, 1rem);
 }
 
 /* Hero */
