@@ -14,7 +14,7 @@ export default function LoginPage() {
     return (
         <section className="login-screen">
             <div className="login-screen-content-wrapper">
-                <ScaleLoader height={10} id="loader" loading={false} />
+                <ScaleLoader height={10} id="loader" loading={isLoading} />
                 <div className="login-form-wrapper">
                     <h2 className="login-page-header">LOGIN</h2>
                     <form className="login-form"

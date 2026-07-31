@@ -16,7 +16,6 @@ function Homepage() {
 
     const fetchProjects = useCallback(() => {
      setTimeout(()=>{
-        console.log('time out')
             setProjectAvailable(isProjectAvailable=>false);
         }, 10000)
 
@@ -42,16 +41,15 @@ function Homepage() {
                         <div className="skills">
                             <p>Tech Stacks: 
                                 <br />
-                                <span>Html, Css, Javacript, React, Node, Pyhton. </span>
+                                <span>Html, Css, TailwindCSS, Java, Javascript, React, Node, Python, Kubernetes, Git etc... </span>
                             </p>
                         </div>
                     </div>
                     <div className='home-top-content-right'>
                         <h1 id='dev-name'>EBIETANMI TAIWO</h1>
                         <h1 id='dev-pos'>Sofware Engineer</h1>
-                        <p className='motto'>...Building Software solutions on code at a time</p>
+                        <p className='motto'>...Building Software solutions one line of code at a time</p>
                         <div className="home-top-content-right-action">
-                            <button>View Details</button>
                             <button onClick={()=>resumeDownloadHandler()}>Download CV</button>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ export default function CreateBlog() {
     const [isLoading, setLoading] = useState(false);
     return (
         <section className="create-blog-screen">
-
+                <ScaleLoader id="loader" height={10} loading={isLoading}/>
             <div className="create-blog-container">
                 <h1 className="create-blog-header">
                     Create Blog
@@ -38,7 +38,7 @@ export default function CreateBlog() {
                             id="excerpt"
                             name="blog_excerpt"
                             required
-                            placeholder="blog title"
+                            placeholder="Excerpt"
 
                         />
                     </div>
@@ -49,7 +49,7 @@ export default function CreateBlog() {
                             id="name"
                             name="blog_content"
                             required
-                            placeholder="blog content"
+                            placeholder="Content"
                         />
                     </div>
                     <div className="create-blog-form-group">
@@ -76,8 +76,7 @@ export default function CreateBlog() {
                     <div className="create-blog-form-group">
                         <label htmlFor="name">Category</label>
                         <select id="category"
-                            name="blog_category"
-                        >
+                            name="blog_category">
                             <option value=''>Select Category</option>
                             <option value='API'>API</option>
                             <option value='CSS'>CSS</option>
