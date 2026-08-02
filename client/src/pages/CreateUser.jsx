@@ -19,7 +19,7 @@ export default function CreateUser() {
                 <form onSubmit={(e) => {
                     e.preventDefault()
                     handleCreateUser(form, isLoading, setLoading, navigate)
-                }} className="_user_form" action="submit" method="post">
+                }} className="create_user_form" action="submit" method="post">
                     <label className="_input_label" htmlFor="username">Username</label>
                     <input required className="_username" type="text" name="username" id=""
                         onChange={handleChange}

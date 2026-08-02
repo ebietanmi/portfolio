@@ -12,7 +12,7 @@ export default function Contact() {
     const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
     const [status, setStatus] = useState("idle");
     const [isLoading, setLoading] = useState(false); 
-    const [networkStatus, setnetworkStatus] = useState('idle');
+    const [networkStatus, setnetworkStatus] = useState('checking');
     const prevStatusRef = useRef(null);
     const timeoutRef = useRef(null);
 
@@ -29,12 +29,12 @@ export default function Contact() {
             setnetworkStatus(response.message);
             if (response.message !== prevStatusRef.current) {
                 prevStatusRef.current = response.message;
-                setStatus(prevStatusRef.current);
+                setnetworkStatus(prevStatusRef.current);
             }
         } catch (error) {
 
         } finally {
-            timeoutRef.current = setTimeout(getNetworkStatus,10000);
+            timeoutRef.current = setTimeout(getNetworkStatus, 1000 * 60 * 1);
         }
     }
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function Contact() {
                     <h2>Let's build something together</h2>
                     <p className="contact-desc">
                         I'm currently open to freelance work and full-time opportunities.
-                        If you have a project that needs clean code and good design, let’s talk.
+                        If you have a project that needs clean code and good design, let's talk.
                     </p>
 
                     <div className="contact-details">
@@ -61,7 +61,7 @@ export default function Contact() {
                             <span className="icon">📧</span>
                             <div>
                                 <p className="detail-label">Email</p>
-                                <a href="mailto:you@email.com">taeb4all@gmail.com</a>
+                                <a href="taeb4all@gmail.com">taeb4all@gmail.com</a>
                             </div>
                         </div>
                         <div className="detail-item">

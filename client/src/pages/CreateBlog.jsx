@@ -76,7 +76,8 @@ export default function CreateBlog() {
                     <div className="create-blog-form-group">
                         <label htmlFor="name">Category</label>
                         <select id="category"
-                            name="blog_category">
+                            name="blog_category"
+                            required>
                             <option value=''>Select Category</option>
                             <option value='API'>API</option>
                             <option value='CSS'>CSS</option>
