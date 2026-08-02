@@ -802,16 +802,19 @@ a {
 }
 
 
-.project-editor-section {
+.create-project-screen {
   width: 100vw;
   height: 100vh;
   background-color: var(--primaryBackgroundColor);
   align-content: center;
+  justify-content: center;
+  padding:0 10px;
 }
 
 .project-editor-wrapper {
-  width: clamp(60%, 60%, 70%);
-  height: clamp(70%, 80%, 80%);;
+  width: clamp(30px, 90%, 1200px);
+  /* min-height: clamp(70%, 80%, 80%); */
+  min-height: fit-content;
   background-color: var(--coolBackgroundColor);
   border-radius: 7px;
   margin: 0 auto;
@@ -873,6 +876,7 @@ a {
 .project-textbox {
   width: 100%;
   height: clamp(30px, 2vh, 40px);
+  color: var(--primaryBackgroundColor);
   background-color: var(--coolBackgroundColor);
   border-radius: 5px;
   border: 1px solid var(--secondaryTextColor);
@@ -941,17 +945,16 @@ a {
   align-content: center;
   background-color: var(--coolBackgroundColor);
   overflow: hidden;
+  padding: min(1rem, 2rem);
 }
 
 .login-screen-content-wrapper{
   position: relative;
-  width: clamp(320px, 80%, 1200px);
-  height: 60%;
+  width: clamp(320px, 60%, 1200px);
+  height:clamp(400px, 50%, 800px);
   display: flex;
   justify-content: center;
-  justify-items:  center;
   align-items: center;
-  align-content: center;
   background-color: var(--primaryBackgroundColor);
   border-radius: 10px;
   z-index: 1;
@@ -961,14 +964,14 @@ a {
   position: absolute;
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
 }
 
 .login-page-header {
   font-family: var(--mono);
   font-size: var(--text-lg);
   justify-content: center;
-  margin: clamp(1rem, 1vh, 1.5rem);
+  margin: clamp(.5rem, .5vh, 1rem);
   text-align: center;
 }
 
@@ -977,7 +980,7 @@ display: flex;
 flex-direction: column;
 justify-content: start;
 width: 100%;
-margin:2rem 0px;
+margin:1.2rem 0;
 }
 
 .login-form-group label{
@@ -994,13 +997,13 @@ margin:2rem 0px;
   color: var(--primaryBackgroundColor);
   border: 1px solid var(--accentColor);
   border-radius: 7px;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
 
 
 }
 
 .form-action-wrapper {
-  width: 80%;
+  width: fit-content;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -1010,25 +1013,29 @@ margin:2rem 0px;
 .login-action-btn {
   display: inline-flex;
   text-align: center;
-  width: clamp(50%, 50%, 320px);
+  width: clamp(30%, 50%, 200px);
   height: clamp(3rem, 10%, 3rem);
   padding: clamp(.5rem, .5vw, 1.0rem);
   border-radius: 5px;
   font-family: var(--mono);
   font-size: var(--text-sm);
   font-weight: 600;
-  margin: clamp(8px, 1vw, 12px);
+  margin: clamp(8px, .5vw, 12px);
   justify-content: center;
+}
+.login-action-btn:hover{
+  scale: 1.05;
+  transition: 1000ms;
 }
 
 .action-cancel-btn {
-  background-color: var(--accentColor);
+  background-color: red;
   color: var(--primaryTextColor);
 }
 
 .action-submit-btn {
-  background-color: var(--primaryTextColor);
-  color: var(--accentColor);
+  background-color: var(--accentColor);
+  color: var(--primaryTextColor);
   border: 1px solid var(--accentColor);
 
 }
@@ -1645,12 +1652,10 @@ margin:2rem 0px;
   max-width:900px;
   height: 100vh;
   font-family: var(--mono);
-  padding-top:1rem;
-  padding-bottom:1rem;
+  padding:1rem;
 }
 .about h1{
   font-size: var(--text-2xl);
-  /* text-align: center; */
   margin-bottom: clamp(.3rem, 0.5vh, .5rem);
 }
 .about h2{
@@ -1663,6 +1668,17 @@ margin:2rem 0px;
   margin: clamp(1rem, 1vh, 2rem);
 
 }
+.work-together-btn{
+  max-width: fit-content;
+  color: var(--primaryTextColor);
+  background-color: var(--accentColor);
+  padding: clamp(.5rem, 1vh, 1rem);
+  border-radius: 7px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  align-self: flex-end;
+}
+
 
 /* MOBILE */
 @media (max-width: 768px) {
@@ -1688,7 +1704,6 @@ margin:2rem 0px;
   position: relative;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   background-color: var(--primaryBackgroundColor);
   color: var(--primaryTextColor);
   font-family: var(--mono);
@@ -1699,7 +1714,7 @@ margin:2rem 0px;
 
 .create-blog-container{
   position: absolute;
-  width: clamp(400px, 80%, 1200px);
+  width: clamp(320px, 80%, 1200px);
   margin: 0 auto;
   z-index: 1;
 }

@@ -20,77 +20,104 @@ import BlogViewMore from './src/pages/BlogViewMore.jsx';
 
 
 const router = createBrowserRouter([
-  { path: '/', element:<Homepage/> },
-  { path: '/login', element: <LoginPage/> },
-  { path: '/dashboard', 
-    loader: async ()=>{
+  { path: '/', element: <Homepage /> },
+  { path: '/login', element: <LoginPage /> },
+  {
+    path: '/dashboard',
+    loader: async () => {
       const token = localStorage.getItem("token");
-      if(!token) redirect('/login');
+      if (!token) redirect('/login');
       try {
         const decodedToken = jwtDecode(token);
-        if(decodedToken.exp * 1000 < Date.now()){
+        if (decodedToken.exp * 1000 < Date.now()) {
           localStorage.removeItem("token")
           return redirect('/login')
         }
-        else return {username:decodedToken.username}
+        else return { username: decodedToken.username }
 
       } catch (error) {
         localStorage.removeItem('token')
         return redirect('/login')
       }
     },
-    element: <Dashboard/> },
-    {path:`/project/:id`,
-      element:<ProjectViewMore/>},
-    {path:'/dashboard/create-user',
-      loader:async ()=>{
+    element: <Dashboard />
+  },
+  {
+    path: `/project/:id`,
+    element: <ProjectViewMore />
+  },
+  {
+    path: '/dashboard/create-user',
+    loader: async () => {
       const token = localStorage.getItem("token");
-      if(!token) redirect('/login');
+      if (!token) redirect('/login');
       try {
         const decodedToken = jwtDecode(token);
-        if(decodedToken.exp * 1000 < Date.now()){
+        if (decodedToken.exp * 1000 < Date.now()) {
           localStorage.removeItem("token")
           return redirect('/login')
         }
-        else return {username:decodedToken.username}
+        else return { username: decodedToken.username }
 
       } catch (error) {
         localStorage.removeItem('token')
         return redirect('/login')
       }
     },
-    element:<CreateUser/>},
-  { path: '/dashboard/create-project', element: <CreateProject/> },
-  { path: '/about', element: <About/> },
-  { path: '/dashboard/create-blog',
-     loader: async ()=>{
+    element: <CreateUser />
+  },
+  {
+    path: '/dashboard/create-project',
+    loader: async () => {
       const token = localStorage.getItem("token");
-      if(!token) redirect('/login');
+      if (!token) redirect('/login');
       try {
         const decodedToken = jwtDecode(token);
-        if(decodedToken.exp * 1000 < Date.now()){
+        if (decodedToken.exp * 1000 < Date.now()) {
           localStorage.removeItem("token")
           return redirect('/login')
         }
-        else return {username:decodedToken.username}
+        else return { username: decodedToken.username }
 
       } catch (error) {
         localStorage.removeItem('token')
         return redirect('/login')
       }
     },
-    element: <CreateBlog/> },
-  {path:'/contact', element:<Contact/>},
-  {path:'/blogs', element:<Blog/>},
-  {path:'/blogs/:id', element:<BlogViewMore/>},
-  { path: '*', element: <Page404/> },
+    element: <CreateProject />
+  },
+  { path: '/about', element: <About /> },
+  {
+    path: '/dashboard/create-blog',
+    loader: async () => {
+      const token = localStorage.getItem("token");
+      if (!token) redirect('/login');
+      try {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem("token")
+          return redirect('/login')
+        }
+        else return { username: decodedToken.username }
+
+      } catch (error) {
+        localStorage.removeItem('token')
+        return redirect('/login')
+      }
+    },
+    element: <CreateBlog />
+  },
+  { path: '/contact', element: <Contact /> },
+  { path: '/blogs', element: <Blog /> },
+  { path: '/blogs/:id', element: <BlogViewMore /> },
+  { path: '*', element: <Page404 /> },
 ])
 
 
 
 
 function App() {
-  return (<RouterProvider router={router}/>);
+  return (<RouterProvider router={router} />);
 }
 
 

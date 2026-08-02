@@ -36,8 +36,7 @@ export default function About() {
                     I'm always curious and always building.
                 </p>
             </div>
-
-            <a href="/contact" className="btn">Let's Work Together</a>
+            <a href="/contact" className="work-together-btn">Let's Work Together</a>
         </section>
     )
 }

@@ -16,7 +16,7 @@ export default function LoginPage() {
             <div className="login-screen-content-wrapper">
                 <ScaleLoader height={10} id="loader" loading={isLoading} />
                 <div className="login-form-wrapper">
-                    <h2 className="login-page-header">LOGIN</h2>
+                    <h2 className="login-page-header">Login</h2>
                     <form className="login-form"
                         onSubmit={(e) => {
                             e.preventDefault()

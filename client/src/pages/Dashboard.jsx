@@ -27,16 +27,7 @@ function Dashboard() {
             .then(res => res.json())
             .then(setBlogs);
     }, []);
-    // const fetchUsers = useCallback(() => {
-    //     getUsersAPI()
-    //         .then(res => res.json())
-    //         .then(setProjects)
-    // }, []);
-    // const fetchBlogs = useCallback(() => {
-    //     getProjectsAPI()
-    //         .then(res => res.json())
-    //         .then(setProjects)
-    // }, []);
+   
 
     useEffect(() => {
         fetchData()

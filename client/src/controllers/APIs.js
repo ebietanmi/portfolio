@@ -1,4 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL;
+
+
 export default async function createUserAPI(credentials) {
   const response = await fetch(`${API_URL}/create-user`, {
     method: "POST",
@@ -88,7 +90,7 @@ export const deleteProjectAPI = async (id) => {
 
 
 export async function checkMailNetworkStatusAPI(){
-  const response = await fetch(`${API_URL}/check-mail-network`,{method:'GET'});
+  const response = await fetch(`${API_URL}/check-mail-network`, {method:'GET'});
   return response;
 }
 

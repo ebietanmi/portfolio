@@ -11,7 +11,7 @@ export default function CreateProject() {
   const navigate = useNavigate();
 
   return (
-    <section className="project-editor-section">
+    <section className="create-project-screen">
       <FontAwesomeIcon onClick={() => { navigate('/dashboard') }} className="addproject-back-btn" icon={faArrowLeft} color='white' />
       <div className="project-editor-wrapper">
         <div className="project-editor-header">
@@ -32,7 +32,7 @@ export default function CreateProject() {
             <h5 className="project-textbox-label">Project Author</h5>
             <input required type="text" name="project_author" id="" className="project-textbox" />
             <h5 className="project-textbox-label">Project Description</h5>
-            <input required type="text" name="project_description" id="" className="project-textbox" />
+            <textarea required name="project_description" id="" className="project-textbox" ></textarea>
             <h5 className="project-textbox-label">Project Thumbnail</h5>
             <input required className="project-select-file" type="file" name="img_file" id="fileID" />
             <FontAwesomeIcon icon={faFile} color="var(--accentColor)"></FontAwesomeIcon>
