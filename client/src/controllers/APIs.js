@@ -102,5 +102,6 @@ export async function sendMailAPI(form) {
     },
     body: JSON.stringify(form),
   });
+  console.log('From sendMailAPI:', response);
   return response;
 }
