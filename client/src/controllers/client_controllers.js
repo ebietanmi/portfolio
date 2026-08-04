@@ -165,6 +165,7 @@ export async function handleChangePassword(formData, isLoading, setLoading) {
 
 //Handle sending of mail functions
 export async function handleSendMail(form, isLoading, setLoading) {
+  console.log(form);
   setLoading(isLoading => true);
   const response = await sendMailAPI(form).then(res => res.json());
   if (response.ok) {
